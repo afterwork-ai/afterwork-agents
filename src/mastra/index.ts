@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { Mastra } from '@mastra/core/mastra';
 import { PinoLogger } from '@mastra/loggers';
 import { storage } from './utils/memory';
-import discoveryWorkflow from './workflows/discovery';
+import { discoveryWorkflow, iterateWorkflow } from './workflows/discovery';
 import ideaEnricher from './discovery/specialists/idea.enricher';
 import ideaImprover from './discovery/specialists/idea.improver';
 import engineeringEvaluator from './discovery/specialists/engineering.evaluator';
@@ -15,7 +15,7 @@ discoveryWorkflow.commit();
 
 // Initialize Mastra instance
 export const mastra = new Mastra({
-  workflows: { discoveryWorkflow },
+  workflows: { discoveryWorkflow, iterateWorkflow },
   agents: { ideaEnricher, ideaImprover, engineeringEvaluator, marketingEvaluator, salesOpsEvaluator, pmEvaluator },
   storage, // Initialize storage for the main Mastra instance
   logger: new PinoLogger({

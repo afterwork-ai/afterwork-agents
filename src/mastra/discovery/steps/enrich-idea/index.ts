@@ -2,7 +2,7 @@ import { createStep } from '@mastra/core/workflows';
 import { enrichedIdeaSchema, rawIdeaSchema } from '../../schemas';
 import ideaEnricher from '../../specialists/idea.enricher';
 
-export default createStep({
+const enrichIdeaStep = createStep({
     id: 'enrich-idea',
     description: 'Enriches business idea with additional information',
     inputSchema: rawIdeaSchema,
@@ -30,3 +30,5 @@ export default createStep({
     return JSON.parse(response.text);
   },
   });
+
+export default enrichIdeaStep;
