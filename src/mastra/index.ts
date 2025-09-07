@@ -1,24 +1,23 @@
 import 'dotenv/config';
 import { Mastra } from '@mastra/core/mastra';
 import { PinoLogger } from '@mastra/loggers';
-import { MongoDBStore } from '@mastra/mongodb';
-import { weatherWorkflow } from './workflows';
-import { weatherAgent } from './agents';
+import { storage } from './utils/memory';
+import discoveryWorkflow from './workflows/discovery';
+import ideaEnricher from './discovery/specialists/idea.enricher';
+import ideaImprover from './discovery/specialists/idea.improver';
+import engineeringEvaluator from './discovery/specialists/engineering.evaluator';
+import marketingEvaluator from './discovery/specialists/marketing.evaluator';
+import salesOpsEvaluator from './discovery/specialists/salesops.evaluator';
+import pmEvaluator from './discovery/specialists/pm.evaluator';
 
+// Initialize workflows 
+discoveryWorkflow.commit();
 
-// Get MongoDB connection string with proper fallback
-const mongoUrl = process.env.MONGODB_CONNECTION_STRING || 'mongodb://localhost:27017';
-
-// Initialize MongoDB storage for the main Mastra instance
-const storage = new MongoDBStore({
-  url: mongoUrl,
-  dbName: 'afterwork-db',
-});
-
+// Initialize Mastra instance
 export const mastra = new Mastra({
-  workflows: { weatherWorkflow },
-  agents: { weatherAgent },
-  storage, // Add storage to the main Mastra instance
+  workflows: { discoveryWorkflow },
+  agents: { ideaEnricher, ideaImprover, engineeringEvaluator, marketingEvaluator, salesOpsEvaluator, pmEvaluator },
+  storage, // Initialize storage for the main Mastra instance
   logger: new PinoLogger({
     name: 'Mastra',
     level: 'info',
