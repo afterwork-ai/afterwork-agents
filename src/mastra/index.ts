@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import "reflect-metadata";
 import { Mastra } from '@mastra/core/mastra';
 import { PinoLogger } from '@mastra/loggers';
 import { storage } from './utils/memory';
@@ -9,9 +10,9 @@ import engineeringEvaluator from './discovery/specialists/engineering.evaluator'
 import marketingEvaluator from './discovery/specialists/marketing.evaluator';
 import salesOpsEvaluator from './discovery/specialists/salesops.evaluator';
 import pmEvaluator from './discovery/specialists/pm.evaluator';
+import { initializeDatabase } from '../config/database';
 
-// Initialize workflows 
-discoveryWorkflow.commit();
+await initializeDatabase();
 
 // Initialize Mastra instance
 export const mastra = new Mastra({

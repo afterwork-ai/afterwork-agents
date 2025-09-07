@@ -19,10 +19,14 @@
     "@mastra/memory": "^0.14.4",
     "@mastra/pg": "^0.15.0",
     "dotenv": "^17.2.2",
+    "pg": "^8.16.3",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.26",
     "zod": "^3.25.76"
   },
   "devDependencies": {
     "@types/node": "^22.15.29",
+    "@types/pg": "^8.15.5",
     "mastra": "latest",
     "typescript": "^5.8.3"
   }
