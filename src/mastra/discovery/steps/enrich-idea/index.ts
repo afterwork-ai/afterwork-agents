@@ -7,27 +7,26 @@ export default createStep({
     description: 'Enriches business idea with additional information',
     inputSchema: rawIdeaSchema,
     outputSchema: enrichedIdeaSchema,
-    execute: async ({ inputData }) => {
-      // get the raw idea
-      const { rawIdea } = inputData;
-  
-      if (!rawIdea) {
-        throw new Error('Raw idea was not found');
+  execute: async ({ inputData, workflowId, runId }) => {
+    // get the raw idea
+    const { rawIdea } = inputData;
+
+    if (!rawIdea) {
+      throw new Error('Raw idea was not found');
+    }
+
+    const response = await ideaEnricher.generate([
+      {
+        role: 'user',
+        content: rawIdea,
+      },
+    ], {
+      memory: {
+        thread: `${workflowId}-${runId}`,
+        resource: `user-${runId}`
       }
-  
-      /*
-      const prompt = `Based on the following weather forecast for ${forecast.location}, suggest appropriate activities:
-        ${JSON.stringify(forecast, null, 2)}
-        `;
-      */
-  
-      const response = await ideaEnricher.generate([
-        {
-          role: 'user',
-          content: rawIdea,
-        },
-      ]);
-  
-      return JSON.parse(response.text);
-    },
+    });
+
+    return JSON.parse(response.text);
+  },
   });

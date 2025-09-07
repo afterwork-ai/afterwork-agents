@@ -7,8 +7,12 @@ export default createStep({
   description: 'Improves the idea based on the team\'s evaluation',
   inputSchema: collectiveEvaluationSchema,
   outputSchema: enrichedIdeaSchema,
-  execute: async ({ inputData }) => {
+  execute: async ({ inputData, workflowId, runId }) => {
     const { enrichedIdea, evaluations } = inputData;
+
+    // Generate dynamic thread and resource IDs based on run ID
+    const threadId = `${workflowId}-${runId}`;
+    const resourceId = `user-${runId}`;
 
     // Improve the idea based on the team's evaluation
     const response = await ideaImprover.generate([
@@ -19,13 +23,18 @@ export default createStep({
             
             The idea to improve is:
 
-            ${JSON.stringify(enrichedIdea)}
+            ${JSON.stringify(enrichedIdea, null, 2)}
 
             The team's evaluation is:
 
-            ${JSON.stringify(evaluations)}` 
+            ${JSON.stringify(evaluations, null, 2)}` 
       }
-    ]);
+    ], {
+      memory: {
+        thread: threadId,
+        resource: resourceId
+      }
+    });
 
     // Parse the response
     const improvedIdea = JSON.parse(response.text);

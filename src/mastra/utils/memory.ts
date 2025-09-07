@@ -1,29 +1,32 @@
 import { Memory } from "@mastra/memory";
-import { MongoDBStore, MongoDBVector } from "@mastra/mongodb";
+import { PostgresStore, PgVector } from "@mastra/pg";
+import { openai } from '@ai-sdk/openai';
 
-// Get MongoDB connection string with proper fallback
-export const mongoUrl = process.env.MONGODB_CONNECTION_STRING || 'mongodb://localhost:27017';
+// Get PostgreSQL connection string with proper fallback
+export const postgresUrl = process.env.POSTGRES_CONNECTION_STRING || 'postgresql://postgres:password@localhost:5432/afterwork_db';
 
-// Initialize MongoDB storage for memory
-export const storage = new MongoDBStore({
-  url: mongoUrl,
-  dbName: 'afterwork-db',
+// Initialize PostgreSQL storage for memory
+export const storage = new PostgresStore({
+  connectionString: postgresUrl,
 });
 
-// Initialize MongoDB vector store for semantic recall
-export const vector = new MongoDBVector({
-  uri: mongoUrl,
-  dbName: 'afterwork-db',
+// Initialize PostgreSQL vector store for semantic recall
+export const vector = new PgVector({
+  connectionString: postgresUrl,
 });
 
-// Initialize memory with MongoDB storage (without vector store for now)
+// Initialize memory with PostgreSQL storage and vector store
 export const memory = new Memory({
   storage,
-  // vector, // Commented out - requires Atlas Search
-  // embedder: openai.embedding('text-embedding-3-small'), // Commented out - requires Atlas Search
+  vector,
+  embedder: openai.embedding('text-embedding-3-small'),
   options: {
     lastMessages: 50, // Keep last 50 messages in context
-    semanticRecall: false, // Disabled - requires Atlas Search
+    semanticRecall: {
+      topK: 3,
+      messageRange: 2,
+      scope: 'thread',
+    },
     workingMemory: {
       enabled: true,
       template: `# User Profile

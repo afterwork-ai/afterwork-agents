@@ -10,23 +10,63 @@ export default createStep({
   description: 'Runs multiple idea evaluations in parallel',
   inputSchema: enrichedIdeaSchema,
   outputSchema: collectiveEvaluationSchema,
-  execute: async ({ inputData }) => {
+  execute: async ({ inputData, workflowId, runId }) => {
     const enrichedIdea = inputData;
+
+    // Generate dynamic thread and resource IDs based on run ID
+    const threadId = `${workflowId}-${runId}`;
+    const resourceId = `user-${runId}`;
 
     // PARALLEL EXECUTION - All evaluations run simultaneously
     const [engineeringResult, marketingResult, productResult, salesopsResult] = await Promise.all([
       engineeringResearcher.generate([
-        { role: 'user', content: `Evaluate this idea: ${JSON.stringify(enrichedIdea)}` }
-      ]),
+        { role: 'user', content: 
+          `Evaluate this idea:
+          
+          ${JSON.stringify(enrichedIdea, null, 2)}` 
+        }
+      ], {
+        memory: {
+          thread: threadId,
+          resource: resourceId
+        }
+      }),
       marketingResearcher.generate([
-        { role: 'user', content: `Evaluate this idea: ${JSON.stringify(enrichedIdea)}` }
-      ]),
+        { role: 'user', content: 
+          `Evaluate this idea:
+          
+          ${JSON.stringify(enrichedIdea, null, 2)}` 
+        }      
+      ], {
+        memory: {
+          thread: threadId,
+          resource: resourceId
+        }
+      }),
       pmResearcher.generate([
-        { role: 'user', content: `Evaluate this idea: ${JSON.stringify(enrichedIdea)}` }
-      ]),
+        { role: 'user', content: 
+          `Evaluate this idea:
+          
+          ${JSON.stringify(enrichedIdea, null, 2)}` 
+        }
+      ], {
+        memory: {
+          thread: threadId,
+          resource: resourceId
+        }
+      }),
       salesopsResearcher.generate([
-        { role: 'user', content: `Evaluate this idea: ${JSON.stringify(enrichedIdea)}` }
-      ])
+        { role: 'user', content: 
+          `Evaluate this idea:
+          
+          ${JSON.stringify(enrichedIdea, null, 2)}` 
+        }
+      ], {
+        memory: {
+          thread: threadId,
+          resource: resourceId
+        }
+      })
     ]);
 
     // Parse results and combine
