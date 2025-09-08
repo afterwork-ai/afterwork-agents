@@ -1,10 +1,10 @@
 import 'dotenv/config';
 import { openai } from '@ai-sdk/openai';
 import { Agent } from '@mastra/core/agent';
-import { context } from '../prompts/context';
+import { context } from '../../../prompts/context';
 import { evaluationSchema } from '../schemas';
-import { schemaToDescription } from '../../utils/zod';
-import { memory } from '../../utils/memory';
+import { schemaToDescription } from '../../../utils/zod';
+import { memory } from '../../../utils/memory';
 
 export default new Agent({
   name: 'Marketing Evaluator',

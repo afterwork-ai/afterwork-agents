@@ -1,10 +1,8 @@
 import { createStep } from '@mastra/core/workflows';
 import { collectiveEvaluationSchema, enrichedIdeaSchema } from '../../schemas';
 import ideaImprover from '../../specialists/idea.improver';
-import enrichIdeaStep from '../enrich-idea';
-import { z } from 'zod';
 
-const improveIdeaStep = createStep({
+export default createStep({
   id: 'improve-idea',
   description: 'Improves the idea based on the team\'s evaluation',
   inputSchema: collectiveEvaluationSchema,
@@ -46,5 +44,3 @@ const improveIdeaStep = createStep({
     return improvedIdea;
   },
 });
-
-export default improveIdeaStep;

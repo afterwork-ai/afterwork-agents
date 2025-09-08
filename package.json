@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "mastra dev"
+    "dev": "mastra dev",
+    "build": "mastra build"
   },
   "keywords": [],
   "author": "",
@@ -20,8 +21,10 @@
     "@mastra/pg": "^0.15.0",
     "dotenv": "^17.2.2",
     "pg": "^8.16.3",
+    "pino-pretty": "^13.1.1",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.26",
+    "uuid": "^13.0.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {

@@ -1,22 +1,22 @@
 import { createStep } from '@mastra/core/workflows';
 import { evaluationSchema, enrichedIdeaSchema, collectiveEvaluationSchema } from '../../schemas';
-import { getSpecialist, SpecialistName } from '../../specialists/specialist.factory';
+import { getEvaluationSpecialist, DomainName } from '../../../../common/specialist.factory';
 import { z } from 'zod';
 import enrichIdeaStep from '../enrich-idea';
 
-export const generateEvaluationStep = (specialistName: SpecialistName) => {
+export const generateEvaluation = (domainName: DomainName) => {
   return createStep({
-    id: `evaluate-${specialistName}`,
-    description: `Evaluates a micro-saas idea from the ${specialistName} perspective`,
+    id: `evaluate-${domainName}`,
+    description: `Evaluates a micro-saas idea from the ${domainName} perspective`,
     inputSchema: enrichedIdeaSchema,
     outputSchema: evaluationSchema,
     execute: async ({ inputData, workflowId, runId }) => {
       const enrichedIdea = inputData;
 
-      const specialist = getSpecialist(specialistName);
+      const specialist = getEvaluationSpecialist(domainName);
 
       if (!specialist) {
-        throw new Error(`Specialist ${specialistName} not found`);
+        throw new Error(`Specialist ${domainName} not found`);
       }
 
       const response = await specialist.generate([
@@ -37,7 +37,7 @@ export const generateEvaluationStep = (specialistName: SpecialistName) => {
   });
 };
 
-export const synthesizeEvaluationsStep = createStep({
+export const synthesizeEvaluations = createStep({
   id: 'synthesize-evaluations',
   description: 'Synthesizes the team\'s evaluations of the idea',
   inputSchema: z.object({

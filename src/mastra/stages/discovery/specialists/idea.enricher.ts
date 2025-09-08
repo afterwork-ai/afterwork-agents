@@ -1,16 +1,16 @@
 import 'dotenv/config';
 import { openai } from '@ai-sdk/openai';
 import { Agent } from '@mastra/core/agent';
-import { context } from '../prompts/context';
+import { context } from '../../../prompts/context';
 import { enrichedIdeaSchema } from '../schemas';
-import { schemaToDescription } from '../../utils/zod';
-import { memory } from '../../utils/memory';
+import { schemaToDescription } from '../../../utils/zod';
+import { memory } from '../../../utils/memory';
 
 export default new Agent({
-  name: 'Idea Improver',
+  name: 'Idea Enricher',
   instructions: `
         You are a vetted tech founder and entrepreneur, specialized in building micro-saas businesses.
-        Your task is to refine an improve a micro-saas idea based on your team's evaluations.
+        Your task is to enrich a raw micro-saas idea into a fully fleshed out micro-saas idea.
 
         GUIDELINES:
         The idea should be fully fleshed out with the following sections:
