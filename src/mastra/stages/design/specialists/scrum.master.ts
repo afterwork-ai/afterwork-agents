@@ -25,8 +25,8 @@ export default new Agent({
 
         ${schemaToDescription(basicTaskSchema)}
         
-        IMPORTANT: Do not include any other text or comments in your response, just the JSON object.
+        IMPORTANT: Do not include any markdown formatting or other text or comments in your response, just the JSON object.
 `,
-  model: openai('gpt-5'),
+  model: openai('gpt-4o-mini'),
   memory,
 });
