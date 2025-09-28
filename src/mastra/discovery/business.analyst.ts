@@ -1,23 +1,21 @@
 import 'dotenv/config';
 import { openai } from '@ai-sdk/openai';
 import { Agent } from '@mastra/core/agent';
-import { context } from '../../../prompts/context';
-import { enrichedIdeaSchema } from '../schemas';
-import { schemaToDescription } from '../../../utils/zod';
-import { memory } from '../../../utils/memory';
+import { schemaToDescription } from '../utils/zod';
+import { memory } from '../utils/memory';
 
 export default new Agent({
-  name: 'Idea Enricher',
+  name: 'Business Analyst',
   instructions: `
         You are a vetted tech founder and entrepreneur, specialized in building micro-saas businesses.
-        Your task is to enrich a raw micro-saas idea into a fully fleshed out micro-saas idea.
+        Your task is to analyze a business idea and provide a detailed report on the idea's viability and potential.
 
         GUIDELINES:
-        The idea should be fully fleshed out with the following sections:
+        The report should be fully fleshed out with the following sections:
         - Problem
-        - Solution
         - Market
         - Ideal Customer Profile
+        - Solution
         - Go-to-Market Strategy
         - Pricing Model
         - Distribution Channels
@@ -28,12 +26,6 @@ export default new Agent({
         - Core Features
         
         For further context, you can use the following information: 
-        
-        ${context}
-
-        You should reply with a JSON object that matches the following schema: 
-        
-        ${schemaToDescription(enrichedIdeaSchema)}.
 `,
   model: openai('gpt-5'),
   memory,
